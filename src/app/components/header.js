@@ -193,7 +193,7 @@ export default function Header() {
                         >
                             <div className="mb-2 flex items-center justify-between">
                                 <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-2">
-                                    <Image src="/logo.svg" alt="Brand" width={24} height={24} />
+                                    <Image src="/assets/logo.png" alt="Brand" width={24} height={24} />
                                     <span className="text-base font-semibold">Devshift</span>
                                 </Link>
                                 <button
