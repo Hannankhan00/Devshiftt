@@ -22,6 +22,8 @@ const NAV = [
     { label: "Contact", href: "/contact" },
 ];
 
+const LOGO = "/assets/logo.png"; // single source of truth
+
 export default function Header() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
@@ -70,20 +72,16 @@ export default function Header() {
         >
             <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 items-center justify-between">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center gap-3">
-                        {/* replace with your logo */}
+                    {/* Logo only (no text) */}
+                    <Link href="/" aria-label="Home" className="flex items-center">
                         <Image
-                            src="/logo.svg"
-                            alt="Brand"
-                            width={28}
-                            height={28}
-                            className="h-7 w-7"
+                            src={LOGO}
+                            alt="Logo"
+                            width={152}
+                            height={44}
                             priority
+                            className="h-12 w-auto"
                         />
-                        <span className="text-lg font-semibold tracking-tight">
-                            Devshift
-                        </span>
                     </Link>
 
                     {/* Desktop Nav */}
@@ -192,9 +190,20 @@ export default function Header() {
                             aria-label="Mobile menu"
                         >
                             <div className="mb-2 flex items-center justify-between">
-                                <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center gap-2">
-                                    <Image src="/assets/logo.png" alt="Brand" width={24} height={24} />
-                                    <span className="text-base font-semibold">Devshift</span>
+                                <Link
+                                    href="/"
+                                    onClick={() => setMobileOpen(false)}
+                                    aria-label="Home"
+                                    className="flex items-center"
+                                >
+                                    <Image
+                                        src={LOGO}
+                                        alt="Logo"
+                                        width={112}
+                                        height={32}
+                                        priority
+                                        className="h-8 w-auto"
+                                    />
                                 </Link>
                                 <button
                                     aria-label="Close menu"
