@@ -1,33 +1,108 @@
-import Link from "next/link";
+"use client";
+import { cn } from "@/lib/utils";
+import React, { useState } from "react";
+
+/**
+ * InteractiveGridPattern is a component that renders a grid pattern with interactive squares.
+ *
+ * @param {Object} props - The component props
+ * @param {number} [props.width=40] - The width of each square
+ * @param {number} [props.height=40] - The height of each square
+ * @param {[number, number]} [props.squares=[24, 24]] - The number of squares in the grid [horizontal, vertical]
+ * @param {string} [props.className] - The class name of the grid
+ * @param {string} [props.squaresClassName] - The class name of the squares
+ * @param {Object} props - Additional SVG props
+ */
+export function InteractiveGridPattern({
+  width = 40,
+  height = 40,
+  squares = [24, 24],
+  className,
+  squaresClassName,
+  ...props
+}) {
+  const [horizontal, vertical] = squares;
+  const [hoveredSquare, setHoveredSquare] = useState(null);
+  
+  // Calculate square size to maintain perfect squares
+  const squareSize = Math.min(width, height);
+  
+  return (
+    <svg
+      className={cn(
+        "absolute inset-0 h-full w-full border border-gray-400/30",
+        className,
+      )}
+      viewBox={`0 0 ${squareSize * horizontal} ${squareSize * vertical}`}
+      preserveAspectRatio="xMidYMid slice"
+      {...props}
+    >
+      {Array.from({ length: horizontal * vertical }).map((_, index) => {
+        const x = (index % horizontal) * squareSize;
+        const y = Math.floor(index / horizontal) * squareSize;
+        return (
+          <rect
+            key={index}
+            x={x}
+            y={y}
+            width={squareSize}
+            height={squareSize}
+            className={cn(
+              "stroke-gray-400/30 transition-all duration-100 ease-in-out [&:not(:hover)]:duration-1000",
+              squaresClassName,
+            )}
+            fill={hoveredSquare === index ? "#4c00ff" : "transparent"}
+            fillOpacity={hoveredSquare === index ? "0.6" : "0"}
+            onMouseEnter={() => setHoveredSquare(index)}
+            onMouseLeave={() => setHoveredSquare(null)}
+          />
+        );
+      })}
+    </svg>
+  );
+}
 
 export default function Hero() {
-  return (
-    <section className="relative overflow-hidden bg-white dark:bg-neutral-950">
-      <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-neutral-900 dark:text-white sm:text-6xl">
-            Transform Your Digital Presence
-          </h1>
-          <p className="mt-6 text-lg leading-8 text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto">
-            We create exceptional digital experiences through cutting-edge web development, 
-            beautiful design, intelligent automation, and strategic marketing solutions.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Link
-              href="/quote"
-              className="rounded-xl bg-black px-6 py-3 text-sm font-semibold text-white shadow-sm hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black dark:bg-white dark:text-black"
-            >
-              Get Started
-            </Link>
-            <Link
-              href="/work"
-              className="text-sm font-semibold leading-6 text-neutral-900 dark:text-white hover:text-neutral-700 dark:hover:text-neutral-300"
-            >
-              View Our Work <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+    return (
+    <section className="relative flex h-screen items-center justify-center overflow-hidden w-full"
+        style={{ backgroundColor: 'var(--background)' }}
+    >
+      {/* Interactive Grid Pattern Background */}
+      <InteractiveGridPattern
+        width={40}
+        height={40}
+        squares={[24, 24]}
+        className="border-gray-800/50"
+        squaresClassName="stroke-gray-800/50"
+        style={{
+          '--hover-fill': '#4c00ff',
+          '--hover-opacity': '0.5'
+        }}
+      />
+      
+      {/* Content */}
+            <div className="relative z-10 text-center max-w-4xl px-4 sm:px-6 lg:px-8">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight"
+                    style={{ color: 'var(--foreground)' }}
+                >
+                    Transform Your Digital Presence
+                </h1>
+                <p className="text-base sm:text-lg md:text-xl mb-8 max-w-3xl mx-auto leading-relaxed"
+                    style={{ color: 'var(--text-muted)' }}
+                >
+                    We create exceptional digital experiences through cutting-edge web
+                    development, beautiful design, intelligent automation, and strategic
+                    marketing solutions.
+                </p>
+                <button className="px-6 py-3 font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 text-white"
+                    style={{
+                        backgroundColor: 'var(--accent)',
+                        '--hover-bg': 'var(--accent-hover)'
+                    }}
+                >
+                    Get a Quote
+                </button>
+            </div>
+        </section>
+    );
 }
