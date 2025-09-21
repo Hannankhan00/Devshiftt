@@ -1,11 +1,10 @@
-import Header from "../components/header";
 import Hero from "./components/hero";
 import HeroParticles from "./components/hero-particles";
 import Services from "./components/services";
 
 export const metadata = {
     title: "Devshift",
-    description: "…",
+    description: "Professional web development, design, and digital marketing services",
 };
 
 export default function HomePage() {
@@ -17,10 +16,8 @@ export default function HomePage() {
             {/* Hero Section - Particles Effect */}
             <HeroParticles />
             
-            <main className="pt-16">
-                {/* Services Section */}
-                <Services />
-            </main>
+            {/* Services Section */}
+            <Services />
         </>
     );
 }

@@ -5,6 +5,21 @@ import { Sun, Moon } from "lucide-react";
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
 
+  // Don't render until mounted to prevent hydration mismatch
+  if (typeof window === 'undefined') {
+    return (
+      <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg border"
+           style={{
+             backgroundColor: 'var(--card-bg)',
+             borderColor: 'var(--card-border)',
+             color: 'var(--foreground)'
+           }}
+      >
+        <div className="w-5 h-5" />
+      </div>
+    );
+  }
+
   return (
     <button
       onClick={toggleTheme}
