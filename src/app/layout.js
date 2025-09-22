@@ -2,7 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/header";
 import Footer from "./components/footer";
-import { ThemeProvider } from "../contexts/ThemeContext";
+
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import ErrorBoundary from "./components/error-boundary";
 
@@ -35,12 +35,12 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} min-h-dvh antialiased`}
       >
         <ErrorBoundary>
-          <ThemeProvider>
+          
             <Header />
             <main className="pt-16">{children}</main>
             <Footer />
             {process.env.NODE_ENV === 'production' && <SpeedInsights />}
-          </ThemeProvider>
+          
         </ErrorBoundary>
       </body>
     </html>

@@ -1,5 +1,16 @@
-import { redirect } from 'next/navigation';
+import Hero from "@/app/home/components/hero";
+import Services from "@/app/home/components/services";
 
-export default function RootPage() {
-  redirect('/home');
+export const metadata = {
+    title: "Devshift",
+    description: "Professional web development, design, and digital marketing services",
+};
+
+export default function HomePage() {
+    return (
+        <>
+            <Hero />
+            <Services />
+        </> 
+    );
 }

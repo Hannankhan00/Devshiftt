@@ -1,43 +1,61 @@
 "use client";
-import { useTheme } from "../../contexts/ThemeContext";
-import { Sun, Moon } from "lucide-react";
 
-export default function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+import { Moon, SunDim } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { flushSync } from "react-dom";
+import { cn } from "@/lib/utils";
 
-  // Don't render until mounted to prevent hydration mismatch
-  if (typeof window === 'undefined') {
-    return (
-      <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg border"
-           style={{
-             backgroundColor: 'var(--card-bg)',
-             borderColor: 'var(--card-border)',
-             color: 'var(--foreground)'
-           }}
-      >
-        <div className="w-5 h-5" />
-      </div>
+export default function ThemeToggle({ className }) {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const buttonRef = useRef(null);
+
+  useEffect(() => {
+    const isDark = document.documentElement.classList.contains("dark");
+    setIsDarkMode(isDark);
+  }, []);
+
+  const changeTheme = async () => {
+    if (!buttonRef.current) return;
+
+    if (!document.startViewTransition) {
+        const dark = document.documentElement.classList.toggle("dark");
+        setIsDarkMode(dark);
+        return;
+    }
+
+    await document.startViewTransition(() => {
+      flushSync(() => {
+        const dark = document.documentElement.classList.toggle("dark");
+        setIsDarkMode(dark);
+      });
+    }).ready;
+
+    const { top, left, width, height } =
+      buttonRef.current.getBoundingClientRect();
+    const y = top + height / 2;
+    const x = left + width / 2;
+
+    const right = window.innerWidth - left;
+    const bottom = window.innerHeight - top;
+    const maxRad = Math.hypot(Math.max(left, right), Math.max(top, bottom));
+
+    document.documentElement.animate(
+      {
+        clipPath: [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${maxRad}px at ${x}px ${y}px)`,
+        ],
+      },
+      {
+        duration: 700,
+        easing: "ease-in-out",
+        pseudoElement: "::view-transition-new(root)",
+      },
     );
-  }
-
+  };
   return (
-    <button
-      onClick={toggleTheme}
-      className="inline-flex items-center justify-center w-10 h-10 rounded-lg border transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2"
-      style={{
-        backgroundColor: 'var(--card-bg)',
-        borderColor: 'var(--card-border)',
-        color: 'var(--foreground)',
-        '--tw-ring-offset-color': 'var(--background)',
-        '--tw-ring-color': 'var(--accent)'
-      }}
-      aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
-    >
-      {theme === 'dark' ? (
-        <Sun className="w-5 h-5" />
-      ) : (
-        <Moon className="w-5 h-5" />
-      )}
+    <button ref={buttonRef} onClick={changeTheme} className={cn(className)}>
+      {isDarkMode ? <SunDim /> : <Moon />}
     </button>
   );
-}
+};

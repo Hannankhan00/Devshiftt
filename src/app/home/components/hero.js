@@ -1,83 +1,29 @@
 "use client";
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
-
-/**
- * InteractiveGridPattern is a component that renders a grid pattern with interactive squares.
- *
- * @param {Object} props - The component props
- * @param {number} [props.width=40] - The width of each square
- * @param {number} [props.height=40] - The height of each square
- * @param {[number, number]} [props.squares=[24, 24]] - The number of squares in the grid [horizontal, vertical]
- * @param {string} [props.className] - The class name of the grid
- * @param {string} [props.squaresClassName] - The class name of the squares
- * @param {Object} props - Additional SVG props
- */
-export function InteractiveGridPattern({
-  width = 40,
-  height = 40,
-  squares = [24, 24],
-  className,
-  squaresClassName,
-  ...props
-}) {
-  const [horizontal, vertical] = squares;
-  const [hoveredSquare, setHoveredSquare] = useState(null);
-  
-  // Calculate square size to maintain perfect squares
-  const squareSize = Math.min(width, height);
-  
-  return (
-    <svg
-      className={cn(
-        "absolute inset-0 h-full w-full border border-gray-400/30",
-        className,
-      )}
-      viewBox={`0 0 ${squareSize * horizontal} ${squareSize * vertical}`}
-      preserveAspectRatio="xMidYMid slice"
-      {...props}
-    >
-      {Array.from({ length: horizontal * vertical }).map((_, index) => {
-        const x = (index % horizontal) * squareSize;
-        const y = Math.floor(index / horizontal) * squareSize;
-        return (
-          <rect
-            key={index}
-            x={x}
-            y={y}
-            width={squareSize}
-            height={squareSize}
-            className={cn(
-              "stroke-gray-400/30 transition-all duration-100 ease-in-out [&:not(:hover)]:duration-1000",
-              squaresClassName,
-            )}
-            fill={hoveredSquare === index ? "#4c00ff" : "transparent"}
-            fillOpacity={hoveredSquare === index ? "0.6" : "0"}
-            onMouseEnter={() => setHoveredSquare(index)}
-            onMouseLeave={() => setHoveredSquare(null)}
-          />
-        );
-      })}
-    </svg>
-  );
-}
+import React, { useState, useEffect } from "react";
+import HeroParticles from "./hero-particles.js";
 
 export default function Hero() {
+    const [accentColor, setAccentColor] = useState("#4c00ff");
+
+    useEffect(() => {
+        const color = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+        if (color) {
+            setAccentColor(color);
+        }
+    }, []);
+
     return (
     <section className="relative flex h-screen items-center justify-center overflow-hidden w-full"
         style={{ backgroundColor: 'var(--background)' }}
     >
-      {/* Interactive Grid Pattern Background */}
-      <InteractiveGridPattern
-        width={40}
-        height={40}
-        squares={[24, 24]}
-        className="border-gray-800/50"
-        squaresClassName="stroke-gray-800/50"
-        style={{
-          '--hover-fill': '#4c00ff',
-          '--hover-opacity': '0.5'
-        }}
+      <HeroParticles
+        className="absolute inset-0"
+        quantity={150}
+        ease={80}
+        color={accentColor}
+        size={0.4}
+        staticity={50}
       />
       
       {/* Content */}
