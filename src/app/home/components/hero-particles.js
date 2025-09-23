@@ -8,26 +8,7 @@ import React, {
   useCallback,
 } from "react";
 
-function useMousePosition() {
-  const [mousePosition, setMousePosition] = useState({
-    x: 0,
-    y: 0,
-  });
-
-  useEffect(() => {
-    const handleMouseMove = (event) => {
-      setMousePosition({ x: event.clientX, y: event.clientY });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
-
-  return mousePosition;
-}
+// Removed global state-based mouse tracking to avoid re-rendering on every move
 
 function hexToRgb(hex) {
   hex = hex.replace("#", "");
@@ -56,20 +37,35 @@ export default function HeroParticles({
   color = "#ffffff",
   vx = 0,
   vy = 0,
+  mouseRadius = 180,
+  mouseStrength = 2,
+  followStrength = 0.2,
   ...props
 }) {
   const canvasRef = useRef(null);
   const canvasContainerRef = useRef(null);
   const context = useRef(null);
   const circles = useRef([]);
-  const mousePosition = useMousePosition();
   const mouse = useRef({ x: 0, y: 0 });
   const canvasSize = useRef({ w: 0, h: 0 });
   const dpr = typeof window !== "undefined" ? window.devicePixelRatio : 1;
   const rafID = useRef(null);
   const resizeTimeout = useRef(null);
+  const isPointerInside = useRef(false);
+  const pendingPointer = useRef(null);
+  const pointerVelocity = useRef({ x: 0, y: 0 });
+  const lastPointerPos = useRef({ x: 0, y: 0 });
+  const hasLastPointer = useRef(false);
+  const [accentColor, setAccentColor] = useState(color);
 
-  const rgb = hexToRgb(color);
+  useEffect(() => {
+    const cssAccent = getComputedStyle(document.documentElement)
+      .getPropertyValue('--accent')
+      .trim();
+    if (cssAccent) setAccentColor(cssAccent);
+  }, []);
+
+  const rgb = hexToRgb(accentColor);
 
   const circleParams = useCallback(() => {
     const x = Math.floor(Math.random() * canvasSize.current.w);
@@ -156,19 +152,37 @@ export default function HeroParticles({
     drawParticles();
   }, [resizeCanvas, drawParticles]);
 
-  const onMouseMove = useCallback(() => {
-    if (canvasRef.current) {
-      const rect = canvasRef.current.getBoundingClientRect();
-      const { w, h } = canvasSize.current;
-      const x = mousePosition.x - rect.left - w / 2;
-      const y = mousePosition.y - rect.top - h / 2;
-      const inside = x < w / 2 && x > -w / 2 && y < h / 2 && y > -h / 2;
-      if (inside) {
-        mouse.current.x = x;
-        mouse.current.y = y;
-      }
+  const onPointerMove = useCallback((event) => {
+    const px = event.clientX;
+    const py = event.clientY;
+    pendingPointer.current = { x: px, y: py };
+    if (hasLastPointer.current) {
+      // Raw delta in screen coordinates; will be applied in canvas space
+      const dx = px - lastPointerPos.current.x;
+      const dy = py - lastPointerPos.current.y;
+      // Low-pass filter to smooth velocity
+      pointerVelocity.current.x = pointerVelocity.current.x * 0.8 + dx * 0.2;
+      pointerVelocity.current.y = pointerVelocity.current.y * 0.8 + dy * 0.2;
     }
-  }, [mousePosition.x, mousePosition.y]);
+    lastPointerPos.current = { x: px, y: py };
+    hasLastPointer.current = true;
+  }, []);
+
+  const applyPendingPointer = useCallback(() => {
+    if (!canvasRef.current || !pendingPointer.current) return;
+    const rect = canvasRef.current.getBoundingClientRect();
+    const { w, h } = canvasSize.current;
+    const relX = pendingPointer.current.x - rect.left - w / 2;
+    const relY = pendingPointer.current.y - rect.top - h / 2;
+    const clampedX = Math.max(Math.min(relX, w / 2), -w / 2);
+    const clampedY = Math.max(Math.min(relY, h / 2), -h / 2);
+    isPointerInside.current =
+      relX < w / 2 && relX > -w / 2 && relY < h / 2 && relY > -h / 2;
+    if (isPointerInside.current) {
+      mouse.current.x = clampedX;
+      mouse.current.y = clampedY;
+    }
+  }, []);
 
   const remapValue = (
     value,
@@ -184,6 +198,16 @@ export default function HeroParticles({
 
   const animate = useCallback(() => {
     clearContext();
+    // Smoothly reset target when pointer leaves
+    if (!isPointerInside.current) {
+      mouse.current.x += (0 - mouse.current.x) / Math.max(ease, 1);
+      mouse.current.y += (0 - mouse.current.y) / Math.max(ease, 1);
+    } else {
+      applyPendingPointer();
+    }
+    // Apply global drift to all particles based on pointer velocity
+    const driftX = pointerVelocity.current.x * followStrength;
+    const driftY = pointerVelocity.current.y * followStrength;
     circles.current.forEach((circle, i) => {
       const edge = [
         circle.x + circle.translateX - circle.size,
@@ -205,12 +229,23 @@ export default function HeroParticles({
       }
       circle.x += circle.dx + vx;
       circle.y += circle.dy + vy;
-      circle.translateX +=
-        (mouse.current.x / (staticity / circle.magnetism) - circle.translateX) /
-        ease;
-      circle.translateY +=
-        (mouse.current.y / (staticity / circle.magnetism) - circle.translateY) /
-        ease;
+      circle.translateX += driftX;
+      circle.translateY += driftY;
+      // Cursor attraction similar to demo: stronger when closer to cursor
+      const mx = mouse.current.x;
+      const my = mouse.current.y;
+      const toMouseX = circle.x + circle.translateX - (canvasSize.current.w / 2 + mx);
+      const toMouseY = circle.y + circle.translateY - (canvasSize.current.h / 2 + my);
+      const dist = Math.hypot(toMouseX, toMouseY);
+      const influence = Math.max(0, 1 - dist / Math.max(mouseRadius, 1));
+      const attractionX = (mx * mouseStrength) * influence;
+      const attractionY = (my * mouseStrength) * influence;
+
+      const denom = staticity / circle.magnetism;
+      const targetX = mx / denom + attractionX;
+      const targetY = my / denom + attractionY;
+      circle.translateX += (targetX - circle.translateX) / ease;
+      circle.translateY += (targetY - circle.translateY) / ease;
 
       drawCircle(circle, true);
 
@@ -225,8 +260,11 @@ export default function HeroParticles({
         drawCircle(newCircle);
       }
     });
+    // Decay global drift over time for natural easing
+    pointerVelocity.current.x *= 0.9;
+    pointerVelocity.current.y *= 0.9;
     rafID.current = window.requestAnimationFrame(animate);
-  }, [clearContext, vx, vy, staticity, ease, circleParams, drawCircle]);
+  }, [clearContext, vx, vy, staticity, ease, circleParams, drawCircle, applyPendingPointer]);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -245,6 +283,13 @@ export default function HeroParticles({
     };
 
     window.addEventListener("resize", handleResize);
+    // Pointer listeners on window for smoother tracking
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    const handleWindowPointerLeave = () => {
+      isPointerInside.current = false;
+      pendingPointer.current = null;
+    };
+    window.addEventListener("pointerleave", handleWindowPointerLeave);
 
     return () => {
       if (rafID.current != null) {
@@ -254,25 +299,49 @@ export default function HeroParticles({
         clearTimeout(resizeTimeout.current);
       }
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerleave", handleWindowPointerLeave);
     };
-  }, [color, initCanvas, animate]);
-
-  useEffect(() => {
-    onMouseMove();
-  }, [onMouseMove]);
+  }, [accentColor, initCanvas, animate, onPointerMove]);
 
   useEffect(() => {
     initCanvas();
   }, [refresh, initCanvas]);
 
   return (
-    <div
-      className={cn("pointer-events-none", className)}
-      ref={canvasContainerRef}
-      aria-hidden="true"
+    <section
+      className={cn("relative flex h-screen items-center justify-center overflow-hidden w-full", className)}
+      style={{ backgroundColor: 'var(--background)' }}
       {...props}
     >
-      <canvas ref={canvasRef} className="size-full" />
-    </div>
+      <div
+        className="absolute inset-0 pointer-events-none"
+        ref={canvasContainerRef}
+        aria-hidden="true"
+      >
+        <canvas ref={canvasRef} className="size-full" />
+      </div>
+
+      <div className="relative z-10 text-center max-w-4xl px-4 sm:px-6 lg:px-8">
+        <h1
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight"
+          style={{ color: 'var(--foreground)' }}
+        >
+          Transform Your Digital Presence
+        </h1>
+        <p
+          className="text-base sm:text-lg md:text-xl mb-8 max-w-3xl mx-auto leading-relaxed"
+          style={{ color: 'var(--text-muted)' }}
+        >
+          We create exceptional digital experiences through cutting-edge web development, beautiful design, intelligent automation, and strategic marketing solutions.
+        </p>
+        <button
+          className="px-6 py-3 font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 text-white"
+          style={{ backgroundColor: 'var(--accent)', '--hover-bg': 'var(--accent-hover)' }}
+        >
+          Get a Quote
+        </button>
+      </div>
+    </section>
   );
 };

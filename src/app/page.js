@@ -1,5 +1,6 @@
 import Hero from "@/app/home/components/hero";
 import Services from "@/app/home/components/services";
+import WhyChooseUs from "@/app/home/components/WhyChooseUs";
 
 export const metadata = {
     title: "Devshift",
@@ -11,6 +12,7 @@ export default function HomePage() {
         <>
             <Hero />
             <Services />
+            <WhyChooseUs />
         </> 
     );
 }
