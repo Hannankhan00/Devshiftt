@@ -9,53 +9,81 @@ export default function CustomCursor({ size = 26, lerp = 0.18 }) {
   const cursorRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
   const [scale, setScale] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
 
-    const handlePointerMove = (e) => {
-      target.current.x = e.clientX;
-      target.current.y = e.clientY;
+    // Mobile detection function
+    const checkMobile = () => {
+      const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                            window.innerWidth < 768 || 
+                            ('ontouchstart' in window) ||
+                            (navigator.maxTouchPoints > 0);
+      setIsMobile(isMobileDevice);
     };
 
-    const handleMouseEnter = (e) => {
-      const el = e.target;
-      if (el && (el.closest("a") || el.closest("button") || el.getAttribute("role") === "button")) {
-        setScale(1.6);
-      }
+    // Initial check
+    checkMobile();
+
+    // Check on resize
+    const handleResize = () => {
+      checkMobile();
     };
 
-    const handleMouseLeave = (e) => {
-      const related = e.relatedTarget;
-      if (!related || !(related.closest && (related.closest("a") || related.closest("button") || related.getAttribute?.("role") === "button"))) {
-        setScale(1);
-      }
-    };
+    // Only set up cursor functionality if not mobile
+    if (!isMobile) {
+      const handlePointerMove = (e) => {
+        target.current.x = e.clientX;
+        target.current.y = e.clientY;
+      };
 
-    const animate = () => {
-      pos.current.x += (target.current.x - pos.current.x) * lerp;
-      pos.current.y += (target.current.y - pos.current.y) * lerp;
-      if (cursorRef.current) {
-        const half = size / 2;
-        cursorRef.current.style.transform = `translate3d(${pos.current.x - half}px, ${pos.current.y - half}px, 0) scale(${scale})`;
-      }
+      const handleMouseEnter = (e) => {
+        const el = e.target;
+        if (el && (el.closest("a") || el.closest("button") || el.getAttribute("role") === "button")) {
+          setScale(1.6);
+        }
+      };
+
+      const handleMouseLeave = (e) => {
+        const related = e.relatedTarget;
+        if (!related || !(related.closest && (related.closest("a") || related.closest("button") || related.getAttribute?.("role") === "button"))) {
+          setScale(1);
+        }
+      };
+
+      const animate = () => {
+        pos.current.x += (target.current.x - pos.current.x) * lerp;
+        pos.current.y += (target.current.y - pos.current.y) * lerp;
+        if (cursorRef.current) {
+          const half = size / 2;
+          cursorRef.current.style.transform = `translate3d(${pos.current.x - half}px, ${pos.current.y - half}px, 0) scale(${scale})`;
+        }
+        rafId.current = requestAnimationFrame(animate);
+      };
+
+      window.addEventListener("pointermove", handlePointerMove, { passive: true });
+      window.addEventListener("mouseover", handleMouseEnter, { passive: true });
+      window.addEventListener("mouseout", handleMouseLeave, { passive: true });
       rafId.current = requestAnimationFrame(animate);
-    };
 
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
-    window.addEventListener("mouseover", handleMouseEnter, { passive: true });
-    window.addEventListener("mouseout", handleMouseLeave, { passive: true });
-    rafId.current = requestAnimationFrame(animate);
+      return () => {
+        if (rafId.current != null) cancelAnimationFrame(rafId.current);
+        window.removeEventListener("pointermove", handlePointerMove);
+        window.removeEventListener("mouseover", handleMouseEnter);
+        window.removeEventListener("mouseout", handleMouseLeave);
+        window.removeEventListener("resize", handleResize);
+      };
+    }
+
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      if (rafId.current != null) cancelAnimationFrame(rafId.current);
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("mouseover", handleMouseEnter);
-      window.removeEventListener("mouseout", handleMouseLeave);
+      window.removeEventListener("resize", handleResize);
     };
-  }, [lerp, size]);
+  }, [lerp, size, isMobile, scale]);
 
-  if (!isMounted) return null;
+  if (!isMounted || isMobile) return null;
 
   return (
     <div

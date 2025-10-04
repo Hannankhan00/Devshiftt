@@ -247,35 +247,47 @@ const AiIcon = () => (
 );
 
 // Floating Background Elements
-const FloatingElements = () => (
-  <>
-    {Array.from({ length: 6 }, (_, i) => (
-      <motion.div
-        key={i}
-        className="absolute rounded-full blur-xl"
-        style={{
-          width: Math.random() * 200 + 50,
-          height: Math.random() * 200 + 50,
-          left: `${Math.random() * 100}%`,
-          top: `${Math.random() * 100}%`,
-          backgroundColor: 'var(--accent)',
-          opacity: 0.1
-        }}
-        animate={{
-          x: [0, 100, -50, 0],
-          y: [0, -100, 50, 0],
-          scale: [1, 1.2, 0.8, 1],
-        }}
-        transition={{
-          duration: Math.random() * 10 + 15,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: Math.random() * 5,
-        }}
-      />
-    ))}
-  </>
-);
+const FloatingElements = () => {
+  // Fixed values to prevent hydration mismatch
+  const elements = [
+    { width: 120, height: 180, left: 15, top: 20, duration: 25, delay: 2 },
+    { width: 200, height: 150, left: 80, top: 60, duration: 30, delay: 5 },
+    { width: 160, height: 200, left: 70, top: 10, duration: 28, delay: 1 },
+    { width: 180, height: 140, left: 20, top: 70, duration: 32, delay: 3 },
+    { width: 140, height: 190, left: 90, top: 30, duration: 26, delay: 4 },
+    { width: 100, height: 160, left: 5, top: 50, duration: 29, delay: 0 }
+  ];
+
+  return (
+    <>
+      {elements.map((element, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full blur-xl"
+          style={{
+            width: element.width,
+            height: element.height,
+            left: `${element.left}%`,
+            top: `${element.top}%`,
+            backgroundColor: 'var(--accent)',
+            opacity: 0.1
+          }}
+          animate={{
+            x: [0, 100, -50, 0],
+            y: [0, -100, 50, 0],
+            scale: [1, 1.2, 0.8, 1],
+          }}
+          transition={{
+            duration: element.duration,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: element.delay,
+          }}
+        />
+      ))}
+    </>
+  );
+};
 
 export default function Services() {
   const containerVariants = {

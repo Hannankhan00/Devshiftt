@@ -36,7 +36,9 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Hide native cursor globally; the custom cursor handles visuals */
-html, body, * {
-  cursor: none !important;
+/* Hide native cursor globally on desktop; show on mobile */
+@media (min-width: 768px) and (hover: hover) {
+  html, body, * {
+    cursor: none !important;
+  }
 }

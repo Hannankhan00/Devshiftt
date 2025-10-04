@@ -1,7 +1,9 @@
 import Hero from "./components/hero";
 import HeroParticles from "./components/hero-particles";
 import Services from "./components/services";
+import Process from "./components/Process";
 import WhyChooseUs from "./components/WhyChooseUs";
+
 
 export const metadata = {
     title: "Devshift",
@@ -22,6 +24,9 @@ export default function HomePage() {
 
             {/* Why Choose Us Section */}
             <WhyChooseUs />
+
+            {/* Process Section */}
+            <Process />
         </>
     );
 }

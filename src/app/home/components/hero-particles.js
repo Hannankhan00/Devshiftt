@@ -264,7 +264,7 @@ export default function HeroParticles({
     pointerVelocity.current.x *= 0.9;
     pointerVelocity.current.y *= 0.9;
     rafID.current = window.requestAnimationFrame(animate);
-  }, [clearContext, vx, vy, staticity, ease, circleParams, drawCircle, applyPendingPointer]);
+  }, [clearContext, vx, vy, staticity, ease, circleParams, drawCircle, applyPendingPointer, followStrength, mouseRadius, mouseStrength]);
 
   useEffect(() => {
     if (canvasRef.current) {
