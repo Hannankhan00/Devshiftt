@@ -373,13 +373,13 @@ export default function Process() {
       <div className="sticky top-20 container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 
-            className="text-4xl md:text-5xl font-bold mb-4"
+            className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-8 leading-tight"
             style={{ color: 'var(--foreground)' }}
           >
             Our Process
           </h2>
           <p 
-            className="text-lg max-w-2xl mx-auto"
+            className="text-xl md:text-2xl max-w-4xl mx-auto leading-relaxed"
             style={{ color: 'var(--text-muted)' }}
           >
             Follow our proven methodology from concept to completion
