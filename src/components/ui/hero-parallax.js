@@ -63,7 +63,7 @@ export const HeroParallax = ({
         className=""
       >
         {/* Desktop parallax rows */}
-        <div className="hidden md:block pb-32">
+        <div className="hidden md:block pb-72">
           <motion.div className="flex flex-row-reverse space-x-reverse space-x-20 mb-20">
             {firstRow.map((product) => (
               <ProductCard
