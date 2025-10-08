@@ -27,12 +27,6 @@ export default function sitemap() {
       priority: 0.8,
     },
     {
-      url: `${baseUrl}/services/nextjs-development`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
       url: `${baseUrl}/services/design`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
@@ -48,7 +42,7 @@ export default function sitemap() {
       url: `${baseUrl}/work`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.9,
     },
     {
       url: `${baseUrl}/contact`,

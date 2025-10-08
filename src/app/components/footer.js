@@ -44,7 +44,6 @@ export default function Footer() {
       title: "Services",
       links: [
         { name: "Web Development", href: "/services/web" },
-        { name: "Our Portfolio", href: "/services/nextjs-development" },
         { name: "UI/UX Design", href: "/services/design" },
         { name: "Automation & AI", href: "/services/automation" },
       ]
@@ -53,7 +52,7 @@ export default function Footer() {
       title: "Company",
       links: [
         { name: "About Us", href: "/about" },
-        { name: "Our Work", href: "/work" },
+        { name: "Portfolio", href: "/work" },
         { name: "Contact", href: "/contact" },
         { name: "Get a Quote", href: "/quote" },
       ]
