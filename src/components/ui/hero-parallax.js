@@ -94,15 +94,19 @@ export const HeroParallax = ({
         </div>
 
         {/* Mobile/Tablet grid layout */}
-        <div className="md:hidden px-4 pb-32">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className="md:hidden px-6 pb-32">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {products.map((product, index) => (
               <motion.div
                 key={product.title}
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 60 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
+                transition={{ 
+                  duration: 0.7, 
+                  delay: index * 0.15,
+                  ease: "easeOut"
+                }}
+                viewport={{ once: true, margin: "-50px" }}
               >
                 <MobileProductCard product={product} />
               </motion.div>
@@ -116,22 +120,35 @@ export const HeroParallax = ({
 
 export const Header = () => {
   return (
-    <div className="max-w-7xl relative mx-auto py-10 sm:py-20 md:py-40 px-4 w-full left-0 top-0">
-      <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 md:mb-8"
-          style={{ color: 'var(--foreground)' }}
+    <div className="max-w-7xl relative mx-auto py-12 sm:py-20 md:py-40 px-6 w-full left-0 top-0">
+      <motion.h1 
+        className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 md:mb-8 leading-tight"
+        style={{ color: 'var(--foreground)' }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
         Our Portfolio
-        <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
+        <motion.span 
+          className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500 mt-2"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+        >
           Showcase
-        </span>
-      </h1>
-      <p className="max-w-2xl text-base sm:text-lg md:text-xl leading-relaxed"
-         style={{ color: 'var(--text-muted)' }}
+        </motion.span>
+      </motion.h1>
+      <motion.p 
+        className="max-w-2xl text-lg sm:text-xl md:text-xl leading-relaxed"
+        style={{ color: 'var(--text-muted)' }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
       >
-        We build exceptional digital experiences with cutting-edge web development, 
-        beautiful design, and intelligent automation solutions. Explore our portfolio 
+        We build exceptional digital experiences with cutting-edge web development,
+        beautiful design, and intelligent automation solutions. Explore our portfolio
         of successful projects that drive real business results.
-      </p>
+      </motion.p>
     </div>
   );
 };
@@ -178,10 +195,11 @@ export const ProductCard = ({
 
 export const MobileProductCard = ({ product }) => {
   return (
-    <div className="group relative overflow-hidden rounded-xl border transition-all duration-300 hover:scale-105"
+    <div className="group relative overflow-hidden rounded-2xl border-2 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl"
          style={{ 
            backgroundColor: 'var(--card-bg)',
-           borderColor: 'var(--card-border)'
+           borderColor: 'var(--card-border)',
+           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
          }}
     >
       <a
@@ -190,30 +208,66 @@ export const MobileProductCard = ({ product }) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <div className="aspect-video overflow-hidden">
+        {/* Enhanced image container with gradient overlay */}
+        <div className="relative aspect-video overflow-hidden">
           <img
             src={product.thumbnail}
-            className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
+            className="object-cover w-full h-full transition-all duration-500 group-hover:scale-110"
             alt={product.title}
           />
+          
+          {/* Gradient overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          
+          {/* Tech stack badge */}
+          <div className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm bg-white/20 text-white border border-white/30 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+            {product.tech}
+          </div>
         </div>
         
-        <div className="p-4">
-          <h3 className="text-lg font-semibold mb-2"
+        {/* Enhanced content area */}
+        <div className="p-6">
+          <h3 className="text-xl font-bold mb-3 leading-tight group-hover:text-blue-500 transition-colors duration-300"
               style={{ color: 'var(--foreground)' }}
           >
             {product.title}
           </h3>
-          <p className="text-sm"
-             style={{ color: 'var(--text-muted)' }}
+          
+          {/* Enhanced tech stack display */}
+          <div className="flex flex-wrap gap-2">
+            {product.tech.split(', ').map((tech, index) => (
+              <span
+                key={index}
+                className="px-3 py-1 text-xs font-medium rounded-full transition-all duration-300"
+                style={{
+                  backgroundColor: 'var(--card-border)',
+                  color: 'var(--text-muted)'
+                }}
+              >
+                {tech.trim()}
+              </span>
+            ))}
+          </div>
+          
+          {/* Call to action */}
+          <div className="mt-4 flex items-center text-sm font-medium opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-2 group-hover:translate-x-0"
+               style={{ color: 'var(--accent)' }}
           >
-            {product.tech}
-          </p>
+            View Project
+            <svg className="w-4 h-4 ml-2 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </div>
         </div>
       </a>
       
-      {/* Hover effect overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+      {/* Enhanced hover effect with glow */}
+      <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+           style={{
+             background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%)',
+             boxShadow: 'inset 0 0 0 1px rgba(59, 130, 246, 0.2)'
+           }}
+      ></div>
     </div>
   );
 };
