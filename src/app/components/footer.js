@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, Github, Twitter, Linkedin, ArrowUpRight, Heart } from "lucide-react";
+import { Mail, Phone, MapPin, Github, Instagram, Linkedin, MessageCircle, ArrowUpRight, Heart } from "lucide-react";
 import { useState } from "react";
 
 export default function Footer() {
@@ -33,9 +33,10 @@ export default function Footer() {
   };
 
   const socialLinks = [
-    { name: "GitHub", icon: Github, href: "#", color: "hover:text-gray-400" },
-    { name: "Twitter", icon: Twitter, href: "#", color: "hover:text-blue-400" },
     { name: "LinkedIn", icon: Linkedin, href: "#", color: "hover:text-blue-600" },
+    { name: "Instagram", icon: Instagram, href: "#", color: "hover:text-pink-500" },
+    { name: "GitHub", icon: Github, href: "#", color: "hover:text-gray-400" },
+    { name: "WhatsApp", icon: MessageCircle, href: "https://wa.me/923397197970", color: "hover:text-green-500" },
   ];
 
   const footerLinks = [
@@ -109,7 +110,7 @@ export default function Footer() {
                 transition={{ duration: 0.3 }}
               >
                 <motion.div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden"
                   style={{ backgroundColor: 'var(--accent)' }}
                   animate={{
                     rotate: [0, 360],
@@ -121,7 +122,13 @@ export default function Footer() {
                     ease: "easeInOut"
                   }}
                 >
-                  <span className="text-white font-bold text-xl">D</span>
+                  <Image
+                    src="/assets/logo.png"
+                    alt="Devshift"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8"
+                  />
                 </motion.div>
                 <span className="text-2xl font-bold"
                       style={{ color: 'var(--foreground)' }}
