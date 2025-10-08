@@ -49,7 +49,7 @@ export const HeroParallax = ({
   return (
     <div
       ref={ref}
-      className="h-[300vh] md:h-[300vh] sm:h-[400vh] py-20 md:py-40 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+      className="min-h-[400vh] md:min-h-[300vh] py-20 md:py-40 pb-32 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
       style={{ backgroundColor: 'var(--background)' }}
     >
       <Header />
@@ -63,7 +63,7 @@ export const HeroParallax = ({
         className=""
       >
         {/* Desktop parallax rows */}
-        <div className="hidden md:block">
+        <div className="hidden md:block pb-20">
           <motion.div className="flex flex-row-reverse space-x-reverse space-x-20 mb-20">
             {firstRow.map((product) => (
               <ProductCard
@@ -82,7 +82,7 @@ export const HeroParallax = ({
               />
             ))}
           </motion.div>
-          <motion.div className="flex flex-row-reverse space-x-reverse space-x-20">
+          <motion.div className="flex flex-row-reverse space-x-reverse space-x-20 mb-20">
             {thirdRow.map((product) => (
               <ProductCard
                 product={product}
@@ -94,7 +94,7 @@ export const HeroParallax = ({
         </div>
 
         {/* Mobile/Tablet grid layout */}
-        <div className="md:hidden px-4">
+        <div className="md:hidden px-4 pb-20">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {products.map((product, index) => (
               <motion.div
