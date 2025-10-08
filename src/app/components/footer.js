@@ -34,8 +34,8 @@ export default function Footer() {
 
   const socialLinks = [
     { name: "LinkedIn", icon: Linkedin, href: "#", color: "hover:text-blue-600" },
-    { name: "Instagram", icon: Instagram, href: "#", color: "hover:text-pink-500" },
-    { name: "GitHub", icon: Github, href: "#", color: "hover:text-gray-400" },
+    { name: "Instagram", icon: Instagram, href: "https://www.instagram.com/devshift_official?igsh=djcyNHRjYzJxcTM0", color: "hover:text-pink-500" },
+    { name: "GitHub", icon: Github, href: "https://github.com/devshiftofficials", color: "hover:text-gray-400" },
     { name: "WhatsApp", icon: MessageCircle, href: "https://wa.me/923397197970", color: "hover:text-green-500" },
   ];
 
@@ -236,8 +236,8 @@ export default function Footer() {
                 <motion.a
                   key={social.name}
                   href={social.href}
-                  target={social.name === "WhatsApp" ? "_blank" : "_self"}
-                  rel={social.name === "WhatsApp" ? "noopener noreferrer" : undefined}
+                  target={["WhatsApp", "Instagram", "GitHub"].includes(social.name) ? "_blank" : "_self"}
+                  rel={["WhatsApp", "Instagram", "GitHub"].includes(social.name) ? "noopener noreferrer" : undefined}
                   className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
                   style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--card-border)' }}
                   whileHover={{ 
