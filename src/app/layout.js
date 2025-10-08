@@ -19,12 +19,12 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "Devshift - Professional Web Development Services",
-  description: "Expert web development, UI/UX design, automation & AI solutions, and digital marketing services.",
-  keywords: "web development, UI/UX design, automation, AI, digital marketing",
+  description: "Expert web development, UI/UX design, and automation & AI solutions.",
+  keywords: "web development, UI/UX design, automation, AI",
   authors: [{ name: "Devshift Team" }],
   openGraph: {
     title: "Devshift - Professional Web Development Services",
-    description: "Expert web development, UI/UX design, automation & AI solutions, and digital marketing services.",
+    description: "Expert web development, UI/UX design, and automation & AI solutions.",
     type: "website",
   },
 };

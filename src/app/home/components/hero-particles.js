@@ -333,7 +333,7 @@ export default function HeroParticles({
           className="text-base sm:text-lg md:text-xl mb-8 max-w-3xl mx-auto leading-relaxed"
           style={{ color: 'var(--text-muted)' }}
         >
-          We create exceptional digital experiences through cutting-edge web development, beautiful design, intelligent automation, and strategic marketing solutions.
+          We create exceptional digital experiences through cutting-edge web development, beautiful design, and intelligent automation solutions.
         </p>
         <button
           className="px-6 py-3 font-semibold rounded-lg transition-all duration-200 transform hover:scale-105 text-white"

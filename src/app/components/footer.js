@@ -46,7 +46,6 @@ export default function Footer() {
         { name: "Web Development", href: "/services/web" },
         { name: "UI/UX Design", href: "/services/design" },
         { name: "Automation & AI", href: "/services/automation" },
-        { name: "Digital Marketing", href: "/services/marketing" },
       ]
     },
     {

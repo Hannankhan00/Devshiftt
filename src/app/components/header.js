@@ -15,7 +15,6 @@ const NAV = [
             { label: "Web Development", href: "/services/web" },
             { label: "UI/UX Design", href: "/services/design" },
             { label: "Automation & AI", href: "/services/automation" },
-            { label: "Marketing", href: "/services/marketing" },
         ],
     },
     { label: "Work", href: "/work" },

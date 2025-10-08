@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Get a Quote - Devshift",
-  description: "Request a custom quote for your web development, design, or digital marketing project.",
+  description: "Request a custom quote for your web development, design, or automation project.",
 };
 
 export default function Quote() {
@@ -86,7 +86,6 @@ export default function Quote() {
                 <option value="web-development">Web Development</option>
                 <option value="ui-ux-design">UI/UX Design</option>
                 <option value="automation-ai">Automation & AI</option>
-                <option value="digital-marketing">Digital Marketing</option>
                 <option value="multiple">Multiple Services</option>
               </select>
             </div>

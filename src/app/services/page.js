@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Services - Devshift",
-  description: "Professional web development, UI/UX design, automation & AI solutions, and digital marketing services.",
+  description: "Professional web development, UI/UX design, and automation & AI solutions.",
 };
 
 export default function Services() {
@@ -72,24 +72,6 @@ export default function Services() {
                style={{ color: 'var(--text-muted)' }}
             >
               Intelligent automation solutions and AI-powered tools to streamline your business.
-            </p>
-          </div>
-          
-          <div className="rounded-xl border p-6"
-               style={{
-                 backgroundColor: 'var(--card-bg)',
-                 borderColor: 'var(--card-border)'
-               }}
-          >
-            <h3 className="text-xl font-semibold"
-                style={{ color: 'var(--foreground)' }}
-            >
-              Digital Marketing
-            </h3>
-            <p className="mt-2"
-               style={{ color: 'var(--text-muted)' }}
-            >
-              Strategic digital marketing campaigns to boost your online presence and growth.
             </p>
           </div>
         </div>
