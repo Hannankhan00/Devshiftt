@@ -49,7 +49,7 @@ export const HeroParallax = ({
   return (
     <div
       ref={ref}
-      className="h-[300vh] py-40 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+      className="h-[300vh] md:h-[300vh] sm:h-[400vh] py-20 md:py-40 overflow-hidden antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
       style={{ backgroundColor: 'var(--background)' }}
     >
       <Header />
@@ -62,33 +62,53 @@ export const HeroParallax = ({
         }}
         className=""
       >
-        <motion.div className="flex flex-row-reverse space-x-reverse space-x-20 mb-20">
-          {firstRow.map((product) => (
-            <ProductCard
-              product={product}
-              translate={translateX}
-              key={product.title}
-            />
-          ))}
-        </motion.div>
-        <motion.div className="flex flex-row mb-20 space-x-20">
-          {secondRow.map((product) => (
-            <ProductCard
-              product={product}
-              translate={translateXReverse}
-              key={product.title}
-            />
-          ))}
-        </motion.div>
-        <motion.div className="flex flex-row-reverse space-x-reverse space-x-20">
-          {thirdRow.map((product) => (
-            <ProductCard
-              product={product}
-              translate={translateX}
-              key={product.title}
-            />
-          ))}
-        </motion.div>
+        {/* Desktop parallax rows */}
+        <div className="hidden md:block">
+          <motion.div className="flex flex-row-reverse space-x-reverse space-x-20 mb-20">
+            {firstRow.map((product) => (
+              <ProductCard
+                product={product}
+                translate={translateX}
+                key={product.title}
+              />
+            ))}
+          </motion.div>
+          <motion.div className="flex flex-row mb-20 space-x-20">
+            {secondRow.map((product) => (
+              <ProductCard
+                product={product}
+                translate={translateXReverse}
+                key={product.title}
+              />
+            ))}
+          </motion.div>
+          <motion.div className="flex flex-row-reverse space-x-reverse space-x-20">
+            {thirdRow.map((product) => (
+              <ProductCard
+                product={product}
+                translate={translateX}
+                key={product.title}
+              />
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Mobile/Tablet grid layout */}
+        <div className="md:hidden px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {products.map((product, index) => (
+              <motion.div
+                key={product.title}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                viewport={{ once: true }}
+              >
+                <MobileProductCard product={product} />
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </motion.div>
     </div>
   );
@@ -96,8 +116,8 @@ export const HeroParallax = ({
 
 export const Header = () => {
   return (
-    <div className="max-w-7xl relative mx-auto py-20 md:py-40 px-4 w-full left-0 top-0">
-      <h1 className="text-4xl md:text-7xl font-bold mb-8"
+    <div className="max-w-7xl relative mx-auto py-10 sm:py-20 md:py-40 px-4 w-full left-0 top-0">
+      <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold mb-6 md:mb-8"
           style={{ color: 'var(--foreground)' }}
       >
         Our Portfolio
@@ -105,7 +125,7 @@ export const Header = () => {
           Showcase
         </span>
       </h1>
-      <p className="max-w-2xl text-lg md:text-xl leading-relaxed"
+      <p className="max-w-2xl text-base sm:text-lg md:text-xl leading-relaxed"
          style={{ color: 'var(--text-muted)' }}
       >
         We build exceptional digital experiences with cutting-edge web development, 
@@ -129,7 +149,7 @@ export const ProductCard = ({
         y: -20,
       }}
       key={product.title}
-      className="group/product h-96 w-[30rem] relative shrink-0"
+      className="group/product h-80 md:h-96 w-[25rem] md:w-[30rem] relative shrink-0"
     >
       <a
         href={product.link}
@@ -141,17 +161,59 @@ export const ProductCard = ({
           src={product.thumbnail}
           height="600"
           width="600"
-          className="object-cover object-left-top absolute h-full w-full inset-0 rounded-2xl"
+          className="object-cover object-left-top absolute h-full w-full inset-0 rounded-xl md:rounded-2xl"
           alt={product.title}
         />
       </a>
-      <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-80 bg-gradient-to-t from-black/90 to-transparent pointer-events-none rounded-2xl transition-opacity duration-300"></div>
-      <h2 className="absolute bottom-4 left-4 opacity-0 group-hover/product:opacity-100 text-white font-semibold text-lg transition-opacity duration-300">
+      <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-80 bg-gradient-to-t from-black/90 to-transparent pointer-events-none rounded-xl md:rounded-2xl transition-opacity duration-300"></div>
+      <h2 className="absolute bottom-3 md:bottom-4 left-3 md:left-4 opacity-0 group-hover/product:opacity-100 text-white font-semibold text-base md:text-lg transition-opacity duration-300">
         {product.title}
       </h2>
-      <p className="absolute bottom-4 right-4 opacity-0 group-hover/product:opacity-100 text-white text-sm transition-opacity duration-300">
+      <p className="absolute bottom-3 md:bottom-4 right-3 md:right-4 opacity-0 group-hover/product:opacity-100 text-white text-xs md:text-sm transition-opacity duration-300">
         {product.tech}
       </p>
     </motion.div>
+  );
+};
+
+export const MobileProductCard = ({ product }) => {
+  return (
+    <div className="group relative overflow-hidden rounded-xl border transition-all duration-300 hover:scale-105"
+         style={{ 
+           backgroundColor: 'var(--card-bg)',
+           borderColor: 'var(--card-border)'
+         }}
+    >
+      <a
+        href={product.link}
+        className="block"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <div className="aspect-video overflow-hidden">
+          <img
+            src={product.thumbnail}
+            className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
+            alt={product.title}
+          />
+        </div>
+        
+        <div className="p-4">
+          <h3 className="text-lg font-semibold mb-2"
+              style={{ color: 'var(--foreground)' }}
+          >
+            {product.title}
+          </h3>
+          <p className="text-sm"
+             style={{ color: 'var(--text-muted)' }}
+          >
+            {product.tech}
+          </p>
+        </div>
+      </a>
+      
+      {/* Hover effect overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+    </div>
   );
 };
