@@ -52,7 +52,7 @@ export default function Footer() {
       title: "Company",
       links: [
         { name: "About Us", href: "/about" },
-        { name: "Portfolio", href: "/work" },
+        { name: "Portfolio", href: "/portfolio" },
         { name: "Contact", href: "/contact" },
         { name: "Get a Quote", href: "/quote" },
       ]

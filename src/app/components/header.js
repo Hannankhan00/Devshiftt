@@ -17,7 +17,7 @@ const NAV = [
             { label: "Automation & AI", href: "/services/automation" },
         ],
     },
-    { label: "Portfolio", href: "/work" },
+    { label: "Portfolio", href: "/portfolio" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
 ];
