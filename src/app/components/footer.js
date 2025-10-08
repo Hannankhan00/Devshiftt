@@ -120,9 +120,9 @@ export default function Footer() {
                 <Image
                   src="/assets/logo.png"
                   alt="Devshift"
-                  width={120}
-                  height={40}
-                  className="h-10 w-auto"
+                  width={160}
+                  height={60}
+                  className="h-16 w-auto"
                 />
               </motion.div>
 
@@ -236,6 +236,8 @@ export default function Footer() {
                 <motion.a
                   key={social.name}
                   href={social.href}
+                  target={social.name === "WhatsApp" ? "_blank" : "_self"}
+                  rel={social.name === "WhatsApp" ? "noopener noreferrer" : undefined}
                   className="w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
                   style={{ backgroundColor: 'var(--card-bg)', borderColor: 'var(--card-border)' }}
                   whileHover={{ 
