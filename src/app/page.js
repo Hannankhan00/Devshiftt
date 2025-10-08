@@ -1,7 +1,4 @@
-import Hero from "@/app/home/components/hero";
-import Services from "@/app/home/components/services";
-import WhyChooseUs from "@/app/home/components/WhyChooseUs";
-import Process from "@/app/home/components/Process";
+import { redirect } from 'next/navigation';
 
 export const metadata = {
     title: "Devshift",
@@ -9,12 +6,5 @@ export const metadata = {
 };
 
 export default function HomePage() {
-    return (
-        <>
-            <Hero />
-            <Services />
-            <WhyChooseUs />
-            <Process />
-        </> 
-    );
+    redirect('/home');
 }
