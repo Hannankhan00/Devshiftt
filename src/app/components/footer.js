@@ -44,6 +44,7 @@ export default function Footer() {
       title: "Services",
       links: [
         { name: "Web Development", href: "/services/web" },
+        { name: "Next.js Development", href: "/services/nextjs-development" },
         { name: "UI/UX Design", href: "/services/design" },
         { name: "Automation & AI", href: "/services/automation" },
       ]
