@@ -4,6 +4,7 @@ import Results from "./components/Results";
 import WhyChooseUs from "./components/WhyChooseUs";
 import Process from "./components/Process";
 import Testimonials from "./components/Testimonials";
+import FinalCTA from "./components/FinalCTA";
 
 
 export const metadata = {
@@ -31,6 +32,9 @@ export default function HomePage() {
 
             {/* Testimonials Section */}
             <Testimonials />
+
+            {/* Final CTA Section */}
+            <FinalCTA />
         </>
     );
 }
