@@ -105,36 +105,25 @@ export default function Footer() {
             {/* Brand Section */}
             <div className="space-y-6">
               <motion.div
-                className="flex items-center gap-3"
+                className="flex items-center"
                 whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
+                animate={{
+                  scale: [1, 1.02, 1],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  hover: { duration: 0.3 }
+                }}
               >
-                <motion.div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden"
-                  style={{ backgroundColor: 'var(--accent)' }}
-                  animate={{
-                    rotate: [0, 360],
-                    scale: [1, 1.1, 1],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <Image
-                    src="/assets/logo.png"
-                    alt="Devshift"
-                    width={32}
-                    height={32}
-                    className="w-8 h-8"
-                  />
-                </motion.div>
-                <span className="text-2xl font-bold"
-                      style={{ color: 'var(--foreground)' }}
-                >
-                  Devshift
-                </span>
+                <Image
+                  src="/assets/logo.png"
+                  alt="Devshift"
+                  width={120}
+                  height={40}
+                  className="h-10 w-auto"
+                />
               </motion.div>
 
               <motion.p 
