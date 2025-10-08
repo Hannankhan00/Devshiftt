@@ -13,7 +13,7 @@ const NAV = [
         label: "Services",
         items: [
             { label: "Web Development", href: "/services/web" },
-            { label: "Next.js Development", href: "/services/nextjs-development" },
+            { label: "Our Portfolio", href: "/services/nextjs-development" },
             { label: "UI/UX Design", href: "/services/design" },
             { label: "Automation & AI", href: "/services/automation" },
         ],
