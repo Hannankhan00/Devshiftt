@@ -7,7 +7,7 @@ export default function Contact() {
     firstName: '',
     lastName: '',
     email: '',
-    companySize: '',
+    budget: '',
     message: '',
     scheduleDemo: false
   });
@@ -36,7 +36,7 @@ export default function Contact() {
              style={{ background: 'linear-gradient(135deg, rgba(147, 51, 234, 0.3), rgba(59, 130, 246, 0.3))' }}></div>
         <div className="absolute -bottom-40 right-1/3 w-64 h-64 rounded-full opacity-15 animate-pulse"
              style={{ background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2))' }}></div>
-      </div>
+        </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 sm:py-24">
         {/* Header Section */}
@@ -117,15 +117,15 @@ export default function Contact() {
                     }}
                     required
                   />
-                </div>
-                
+              </div>
+              
                 <div className="space-y-2">
                   <label htmlFor="lastName" className="block text-sm font-semibold"
                          style={{ color: 'var(--foreground)' }}>
                     Last name
-                  </label>
-                  <input
-                    type="text"
+                </label>
+                <input
+                  type="text"
                     id="lastName"
                     name="lastName"
                     value={formData.lastName}
@@ -137,22 +137,22 @@ export default function Contact() {
                       borderColor: 'var(--card-border)',
                       color: 'var(--foreground)'
                     }}
-                    required
-                  />
+                  required
+                />
                 </div>
               </div>
-
-              {/* Email and Company Size */}
+              
+              {/* Email and Budget */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="email" className="block text-sm font-semibold"
                          style={{ color: 'var(--foreground)' }}>
                     Work email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="Enter work email"
@@ -162,19 +162,19 @@ export default function Contact() {
                       borderColor: 'var(--card-border)',
                       color: 'var(--foreground)'
                     }}
-                    required
-                  />
-                </div>
-                
+                  required
+                />
+              </div>
+              
                 <div className="space-y-2">
-                  <label htmlFor="companySize" className="block text-sm font-semibold"
+                  <label htmlFor="budget" className="block text-sm font-semibold"
                          style={{ color: 'var(--foreground)' }}>
-                    Company size
+                    Project Budget
                   </label>
                   <select
-                    id="companySize"
-                    name="companySize"
-                    value={formData.companySize}
+                    id="budget"
+                    name="budget"
+                    value={formData.budget}
                     onChange={handleInputChange}
                     className="w-full px-4 py-4 rounded-xl border-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/20 appearance-none bg-no-repeat bg-right bg-[length:20px] pr-12"
                     style={{
@@ -185,12 +185,13 @@ export default function Contact() {
                     }}
                     required
                   >
-                    <option value="">Select Company size</option>
-                    <option value="1-10">1-10 employees</option>
-                    <option value="11-50">11-50 employees</option>
-                    <option value="51-200">51-200 employees</option>
-                    <option value="201-500">201-500 employees</option>
-                    <option value="500+">500+ employees</option>
+                    <option value="">Select Budget Range</option>
+                    <option value="under-5k">Under $5,000</option>
+                    <option value="5k-10k">$5,000 - $10,000</option>
+                    <option value="10k-25k">$10,000 - $25,000</option>
+                    <option value="25k-50k">$25,000 - $50,000</option>
+                    <option value="50k-100k">$50,000 - $100,000</option>
+                    <option value="100k+">$100,000+</option>
                   </select>
                 </div>
               </div>
@@ -217,7 +218,7 @@ export default function Contact() {
                   required
                 ></textarea>
               </div>
-
+              
               {/* Schedule Demo Toggle */}
               <div className="flex items-center justify-between p-4 rounded-xl border-2 transition-all duration-300"
                    style={{ 
